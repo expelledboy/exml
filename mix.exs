@@ -5,6 +5,8 @@ defmodule Exml.Mixfile do
     [app: :exml,
      version: "0.0.1",
      elixir: "~> 1.0",
+     description: description,
+     package: package,
      deps: deps]
   end
 
@@ -15,4 +17,19 @@ defmodule Exml.Mixfile do
   defp deps do
     []
   end
+
+  defp description do
+    """
+    Most simple Elixir wrapper for xmerl xpath 
+    """
+  end
+
+  defp package do
+    [
+      files: ["lib", "priv", "mix.exs", "README*"],
+      maintainers: ["expelledboy"]
+    ]
+  end
 end
+
+
