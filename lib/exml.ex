@@ -16,11 +16,12 @@ defmodule Exml do
     xpath(node,path) |> text
   end
 
-  defp xpath(nil, _), do: []
+  defp xpath(nil, _), do: nil
   defp xpath(node, path) do
     :xmerl_xpath.string(to_char_list(path), node)
   end
 
+  defp text([]), do: nil
   defp text([item]), do: text(item)
   defp text(xmlElement(content: content)), do: text(content)
   defp text(xmlAttribute(value: value)), do: List.to_string(value)

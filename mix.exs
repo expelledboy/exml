@@ -3,7 +3,7 @@ defmodule Exml.Mixfile do
 
   def project do
     [app: :exml,
-     version: "0.0.2",
+     version: "0.1.0",
      elixir: "~> 1.0",
      description: description,
      package: package,
