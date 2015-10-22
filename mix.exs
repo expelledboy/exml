@@ -27,7 +27,8 @@ defmodule Exml.Mixfile do
   defp package do
     [
       files: ["lib", "priv", "mix.exs", "README*"],
-      maintainers: ["expelledboy"]
+      maintainers: ["expelledboy"],
+      links: %{"GitHub" => "https://github.com/expelledboy/exml"},
     ]
   end
 end
