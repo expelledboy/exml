@@ -3,7 +3,7 @@ defmodule Exml.Mixfile do
 
   def project do
     [app: :exml,
-     version: "0.0.1",
+     version: "0.0.2",
      elixir: "~> 1.0",
      description: description,
      package: package,
@@ -27,7 +27,8 @@ defmodule Exml.Mixfile do
   defp package do
     [
       files: ["lib", "priv", "mix.exs", "README*"],
-      maintainers: ["expelledboy"]
+      maintainers: ["expelledboy"],
+      links: %{"GitHub" => "https://github.com/expelledboy/exml"},
     ]
   end
 end
