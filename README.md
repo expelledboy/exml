@@ -29,4 +29,4 @@ Exml.get doc, "//title"
 #=> ["Harry Potter", "Learning XML"]
 ```
 
-See http://www.w3schools.com/xpath/xpath_syntax.asp
+See [w3schools](https://www.w3schools.com/xml/xpath_syntax.asp) for details about xpath!
