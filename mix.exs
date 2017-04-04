@@ -15,7 +15,9 @@ defmodule Exml.Mixfile do
   end
 
   defp deps do
-    []
+    [
+      {:ex_doc, "0.7.2", only: [:dev]}
+    ]
   end
 
   defp description do
@@ -26,7 +28,8 @@ defmodule Exml.Mixfile do
 
   defp package do
     [
-      files: ["lib", "priv", "mix.exs", "README*"],
+      files: ["lib", "mix.exs", "README*"],
+      licenses: ["Apache 2.0"],
       maintainers: ["expelledboy"],
       links: %{"GitHub" => "https://github.com/expelledboy/exml"},
     ]
