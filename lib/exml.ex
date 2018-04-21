@@ -25,7 +25,7 @@ defmodule Exml do
   defp xpath(nil, _), do: nil
 
   defp xpath(node, path) do
-    :xmerl_xpath.string(to_char_list(path), node)
+    :xmerl_xpath.string(to_charlist(path), node)
   end
 
   defp text([]), do: nil
