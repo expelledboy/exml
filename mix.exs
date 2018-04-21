@@ -7,7 +7,7 @@ defmodule Exml.Mixfile do
     [
       app: :exml,
       version: "0.1.1",
-      elixir: "~> 1.0",
+      elixir: "~> 1.6",
       description: @description,
       package: package(),
       deps: deps()
