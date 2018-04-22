@@ -19,9 +19,7 @@ defmodule Exml.Mixfile do
   end
 
   defp deps do
-    [
-      {:ex_doc, "0.7.2", only: [:dev]}
-    ]
+    [{:ex_doc, "~> 0.18.3", only: :dev, runtime: false}]
   end
 
   defp package do
