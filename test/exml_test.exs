@@ -8,6 +8,6 @@ defmodule Exml.Test do
     assert nil == Exml.parse(xml) |> Exml.get("//no/path")
     assert "" == Exml.parse(xml) |> Exml.get("//name/@title")
     xml = "<list><item>one</item><item>two</item></list>"
-    assert ["one","two"] == Exml.parse(xml) |> Exml.get("//item")
+    assert ["one", "two"] == Exml.parse(xml) |> Exml.get("//item")
   end
 end

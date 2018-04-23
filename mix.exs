@@ -1,13 +1,17 @@
 defmodule Exml.Mixfile do
   use Mix.Project
 
+  @description "Most simple Elixir wrapper for xmerl xpath"
+
   def project do
-    [app: :exml,
-     version: "0.1.1",
-     elixir: "~> 1.0",
-     description: description(),
-     package: package(),
-     deps: deps()]
+    [
+      app: :exml,
+      version: "0.1.1",
+      elixir: "~> 1.0",
+      description: @description,
+      package: package(),
+      deps: deps()
+    ]
   end
 
   def application do
@@ -16,14 +20,9 @@ defmodule Exml.Mixfile do
 
   defp deps do
     [
-      {:ex_doc, "0.7.2", only: [:dev]}
+      {:ex_doc, "~> 0.18.3", only: :dev, runtime: false},
+      {:credo, "~> 0.9.2", only: [:dev, :test], runtime: false}
     ]
-  end
-
-  defp description do
-    """
-    Most simple Elixir wrapper for xmerl xpath 
-    """
   end
 
   defp package do
@@ -31,9 +30,7 @@ defmodule Exml.Mixfile do
       files: ["lib", "mix.exs", "README*"],
       licenses: ["Apache 2.0"],
       maintainers: ["expelledboy"],
-      links: %{"GitHub" => "https://github.com/expelledboy/exml"},
+      links: %{"GitHub" => "https://github.com/expelledboy/exml"}
     ]
   end
 end
-
-
