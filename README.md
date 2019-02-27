@@ -6,9 +6,16 @@ Exml
 [![Hex.pm](https://img.shields.io/hexpm/dt/exml.svg)](https://hex.pm/packages/exml)
 
 Add to mix.exs
+
 ```elixir
-{:exml, "~> 0.1.1"}
+  defp deps() do
+    [
+      {:exml, "~> 0.1.1"}
+    ]
+  end
 ```
+
+Basic usage
 
 ```elixir
 xml = """
