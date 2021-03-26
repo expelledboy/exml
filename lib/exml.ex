@@ -2,7 +2,7 @@ defmodule Exml do
   require Record
   
   ~w(xmlElement xmlAttribute xmlText xmlObj)a
-  |> Enum.map(&Record.defrecord(&1, Record.extract(&1, from_lib: "xmerl/include/xmerl.hrl"))
+  |> Enum.map(&Record.defrecord(&1, Record.extract(&1, from_lib: "xmerl/include/xmerl.hrl")))
   
   def parse(xml_string, options \\ [quiet: true]) when is_binary(xml_string) do
     {doc, []} =
