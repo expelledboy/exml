@@ -36,7 +36,7 @@ defmodule Exml do
     end
   end
   
-  defp text(xmlObj(value: value, type: :number)), do: List.to_string(value) |> String.to_integer()
+  defp text(xmlObj(value: value, type: :number)), do: value
   defp text(xmlObj(value: value)), do: List.to_string(value)
 
   defp text(term), do: fatal(term)
