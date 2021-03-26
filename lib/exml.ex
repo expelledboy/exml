@@ -1,14 +1,9 @@
 defmodule Exml do
   require Record
-  Record.defrecord(:xmlElement, Record.extract(:xmlElement, from_lib: "xmerl/include/xmerl.hrl"))
-
-  Record.defrecord(
-    :xmlAttribute,
-    Record.extract(:xmlAttribute, from_lib: "xmerl/include/xmerl.hrl")
-  )
-
-  Record.defrecord(:xmlText, Record.extract(:xmlText, from_lib: "xmerl/include/xmerl.hrl"))
-
+  
+  ~w(xmlElement xmlAttribute xmlText xmlObj)a
+  |> Enum.map(&Record.defrecord(&1, Record.extract(&1, from_lib: "xmerl/include/xmerl.hrl")))
+  
   def parse(xml_string, options \\ [quiet: true]) when is_binary(xml_string) do
     {doc, []} =
       xml_string
@@ -40,6 +35,9 @@ defmodule Exml do
       true -> fatal(list)
     end
   end
+  
+  defp text(xmlObj(value: value, type: :number)), do: value
+  defp text(xmlObj(value: value)), do: List.to_string(value)
 
   defp text(term), do: fatal(term)
 
