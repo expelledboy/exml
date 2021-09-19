@@ -1,9 +1,31 @@
 defmodule Exml do
+  @moduledoc """
+  This module provides a simple interface to parse XML documents and
+  provide XPath access to the document.
+
+  The module provides two functions:
+  - `parse/{1,2}` parses an XML document and returns a document tree.
+  - `get/2` provides XPath access to the document.
+
+  Example:
+
+  ```
+  xml = "<book><title>The Giver</title><author>John Grisham</author></book>"
+  doc = Exml.parse xml
+
+  Exml.get doc, "//book/title"
+  # => "The Giver"
+  ```
+  """
+
   require Record
-  
+
   ~w(xmlElement xmlAttribute xmlText xmlObj)a
   |> Enum.map(&Record.defrecord(&1, Record.extract(&1, from_lib: "xmerl/include/xmerl.hrl")))
-  
+
+  @doc """
+  Parse XML and return a document tree
+  """
   def parse(xml_string, options \\ [quiet: true]) when is_binary(xml_string) do
     {doc, []} =
       xml_string
@@ -13,6 +35,9 @@ defmodule Exml do
     doc
   end
 
+  @doc """
+  Get the value of an XML attribute using XPath from a document tree
+  """
   def get(node, path) do
     xpath(node, path) |> text
   end
@@ -30,12 +55,13 @@ defmodule Exml do
   defp text(xmlText(value: value)), do: List.to_string(value)
 
   defp text(list) when is_list(list) do
+    # credo:disable-for-next-line Credo.Check.Refactor.CondStatements
     cond do
       Enum.all?(list, &parsable/1) -> Enum.map(list, &text(&1))
       true -> fatal(list)
     end
   end
-  
+
   defp text(xmlObj(value: value, type: :number)), do: value
   defp text(xmlObj(value: value)), do: List.to_string(value)
 
