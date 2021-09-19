@@ -10,7 +10,8 @@ defmodule Exml.Mixfile do
       elixir: "~> 1.0",
       description: @description,
       package: package(),
-      deps: deps()
+      deps: deps(),
+      dialyzer: dialyzer()
     ]
   end
 
@@ -20,8 +21,9 @@ defmodule Exml.Mixfile do
 
   defp deps do
     [
-      {:ex_doc, "~> 0.18.3", only: :dev, runtime: false},
-      {:credo, "~> 0.9.2", only: [:dev, :test], runtime: false}
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false},
+      {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
     ]
   end
 
@@ -31,6 +33,13 @@ defmodule Exml.Mixfile do
       licenses: ["Apache 2.0"],
       maintainers: ["expelledboy"],
       links: %{"GitHub" => "https://github.com/expelledboy/exml"}
+    ]
+  end
+
+  defp dialyzer do
+    [
+      plt_core_path: "priv/plts",
+      plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
     ]
   end
 end

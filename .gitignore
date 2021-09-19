@@ -1,5 +1,9 @@
 /_build
 /deps
+/.elixir_ls
+/priv/plts/*.plt
+/priv/plts/*.plt.hash
+/doc
+/cover
 erl_crash.dump
 *.ez
-.elixir_ls
