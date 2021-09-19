@@ -1,0 +1,76 @@
+name: Elixir CI
+
+env:
+  MIX_ENV: test
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  test:
+    name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        elixir:
+          - 1.12
+          - 1.5
+        otp:
+          - 24.0
+          - 20.0
+          - 17.5
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup elixir
+        uses: actions/setup-elixir@v1
+        with:
+          otp-version: ${{ matrix.otp }}
+          elixir-version: ${{ matrix.elixir }}
+
+      - name: Restore build cache
+        uses: actions/cache@v2
+        id: build-cache
+        with:
+          path: |
+            deps
+            _build
+          key: ${{ runner.os }}-mix-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles('**/mix.lock') }}
+
+      - name: Install dependencies
+        if: steps.build-cache.outputs.cache-hit != 'true'
+        run: |
+          make update-dep-repos
+          make deps
+
+      - name: Check code
+        run: make lint
+
+      - name: Restore PLT Cache
+        uses: actions/cache@v2
+        id: plt-cache
+        with:
+          path: priv/plts
+          key: ${{ runner.os }}-plts-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles('**/mix.lock') }}
+
+      - name: Create PLTs
+        if: steps.plt-cache.outputs.cache-hit != 'true'
+        run: |
+          make priv/plts/dialyzer.plt
+
+      - name: Run dialyzer
+        run: make dialyzer
+
+      - name: Generate docs
+        run: mix docs
+
+      - name: Save build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: doc-cover
+          path: |
+            doc
+            cover
