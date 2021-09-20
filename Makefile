@@ -27,7 +27,7 @@ test: deps ## Run unit tests
 	mix test \
 		--warnings-as-errors \
 		--cover \
-		--export-coverage default
+		--export-coverage default \
 		--timeout 120000
 	mix test.coverage
 
@@ -37,7 +37,35 @@ priv/plts/dialyzer.plt: mix.lock
 
 .PHONY: dialyzer
 dialyzer: priv/plts/dialyzer.plt ## Perform static code analysis
-	mix dialyzer --no-check --halt-exit-status
+	mix dialyzer --no-check
 
 .PHONY: ci
-ci: lint test dialyzer ## Tests run before publishing
+ci: deps lint test dialyzer ## Tests run before publishing
+
+RELEASE_LEVEL = $(addprefix release-,major minor patch)
+
+.PHONY: $(RELEASE_LEVEL)
+$(RELEASE_LEVEL):
+	LEVEL=$(@:release-%=%) make release
+
+.PHONY: release
+release: env-LEVEL ci
+	git branch --no-color | grep -q '^\* master$$'
+	git diff-index --quiet HEAD
+	$(eval TAG := $(shell git describe --tags --abbrev=0 | sed 's/v//'))
+	$(eval VERSION := $(shell ./scripts/bump.sh $(TAG) $(LEVEL) | sed 's/v//'))
+	# Bump $(TAG) to $(VERSION)
+	sed -i 's/version: "$(TAG)"/version: "$(VERSION)"/g' mix.exs
+	sed -i 's/~> $(TAG)/~> $(VERSION)/g' README.md
+	git add README.md mix.exs
+	git commit -m 'Realease v$(VERSION)'
+	git tag v$(VERSION)
+	git push --tags --force
+
+## => Utils
+
+env-%:
+	@ if [ "${${*}}" = "" ]; then \
+		echo "Environment variable $* not set"; \
+		exit 1; \
+	fi
