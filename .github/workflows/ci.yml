@@ -2,6 +2,10 @@ name: Elixir CI
 
 env:
   MIX_ENV: test
+  HEX_HOME: $PWD/_build/hex
+  MIX_HOME: $PWD/_build/mix
+  REBAR_GLOBAL_CONFIG_DIR: $PWD/_build/rebar3
+  REBAR_CACHE_DIR: $PWD/_build/rebar3.cache
 
 on:
   push:
@@ -11,45 +15,37 @@ on:
 
 jobs:
   test:
-    name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        elixir:
-          - 1.12
-          - 1.5
-        otp:
-          - 24.0
-          - 20.0
-          - 17.5
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup elixir
-        uses: actions/setup-elixir@v1
+      - uses: cachix/install-nix-action@v13
         with:
-          otp-version: ${{ matrix.otp }}
-          elixir-version: ${{ matrix.elixir }}
+          nix_path: nixpkgs=channel:nixos-unstable
 
-      - name: Restore build cache
-        uses: actions/cache@v2
+      - name: Setup nix shell
+        # TODO could be cached, but takes ~30 secs
+        run: nix-shell --run 'elixir --eval "IO.puts System.version()"'
+
+      - name: Cache build
+        uses: actions/cache@v2.1.5
         id: build-cache
         with:
-          path: |
-            deps
-            _build
-          key: ${{ runner.os }}-mix-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles('**/mix.lock') }}
+          path: deps _build
+          key: ${{ runner.os }}-mix-test3-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-mix-
 
       - name: Install dependencies
-        if: steps.build-cache.outputs.cache-hit != 'true'
-        run: |
-          make update-dep-repos
-          make deps
+        run: nix-shell --run 'make update-dep-repos deps'
 
       - name: Check code
-        run: make lint
+        run: nix-shell --run 'make lint'
 
-      - name: Restore PLT Cache
+      - name: Run unit tests
+        run: nix-shell --run 'make test'
+
+      - name: Cache PLTs
         uses: actions/cache@v2
         id: plt-cache
         with:
@@ -58,14 +54,13 @@ jobs:
 
       - name: Create PLTs
         if: steps.plt-cache.outputs.cache-hit != 'true'
-        run: |
-          make priv/plts/dialyzer.plt
+        run: nix-shell --run 'make priv/plts/dialyzer.plt'
 
       - name: Run dialyzer
-        run: make dialyzer
+        run: nix-shell --run 'make dialyzer'
 
       - name: Generate docs
-        run: mix docs
+        run: nix-shell --run 'mix docs'
 
       - name: Save build artifacts
         uses: actions/upload-artifact@v2
