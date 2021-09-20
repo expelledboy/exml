@@ -60,7 +60,8 @@ release: env-LEVEL ci
 	git add README.md mix.exs
 	git commit -m 'Realease v$(VERSION)'
 	git tag v$(VERSION)
-	git push --tags --force
+	git push --force
+	git push --tags
 
 ## => Utils
 
