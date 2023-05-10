@@ -1,3 +1,4 @@
+/.direnv
 /_build
 /deps
 /.elixir_ls

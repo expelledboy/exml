@@ -1,7 +1,7 @@
 Exml
 ====
 
-[![Travis](https://img.shields.io/travis/expelledboy/exml.svg)](https://travis-ci.org/expelledboy/exml)
+[![Elixir CI](https://github.com/expelledboy/exml/actions/workflows/ci.yml/badge.svg)](https://github.com/expelledboy/exml/actions/workflows/ci.yml)
 [![Hex.pm](https://img.shields.io/hexpm/v/exml.svg)](https://hex.pm/packages/exml)
 [![Hex.pm](https://img.shields.io/hexpm/dt/exml.svg)](https://hex.pm/packages/exml)
 
