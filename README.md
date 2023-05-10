@@ -10,7 +10,7 @@ Add to mix.exs
 ```elixir
   defp deps() do
     [
-      {:exml, "~> 0.1.2"}
+      {:exml, "~> 0.1.3"}
     ]
   end
 ```
