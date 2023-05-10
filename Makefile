@@ -50,7 +50,7 @@ $(RELEASE_LEVEL):
 
 .PHONY: release
 release: env-LEVEL ci
-	git branch --no-color | grep -q '^\* master$$'
+	git rev-parse --abbrev-ref HEAD | grep -q '^master$$'
 	git diff-index --quiet HEAD
 	$(eval TAG := $(shell git describe --tags --abbrev=0 | sed 's/v//'))
 	$(eval VERSION := $(shell ./scripts/bump.sh $(TAG) $(LEVEL) | sed 's/v//'))
